@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>Marker based AR Video Portfolio</title>
+
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    #unmute-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+      padding: 10px;
+      background: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body style="margin : 0px; overflow: hidden;">
+
+  <div id="unmute-button">Unmute</div>
+
+  <!-- A-frame scene -->
+  <a-scene vr-mode-ui="enabled: false;" embedded arjs="sourceType: webcam; 
+  sourceWidth:1280; sourceHeight:960; 
+  displayWidth: 1280; displayHeight: 960; 
+  debugUIEnabled: false;">
+
+  <a-assets>
+    <!-- Define your videos here -->
+    <video id="video1" src="./VR-AR-ProjectCards/1.mp4" autoplay loop muted></video>
+    <video id="video2" src="./VR-AR-ProjectCards/2.mp4" autoplay loop muted></video>
+    <video id="video3" src="./VR-AR-ProjectCards/3.mp4" autoplay loop muted></video>
+    <video id="video4" src="./VR-AR-ProjectCards/4.mp4" autoplay loop muted></video>
+    <video id="video5" src="./VR-AR-ProjectCards/5.mp4" autoplay loop muted></video>
+  </a-assets>
+
+  <!-- Project Virtual Flight -->
+  <a-marker type="pattern" url="pattern-marker/virtual-flight/pattern-icon-01.patt">     
+    <a-video src="#video1" position="0 0 0" width="2" height="1.5" rotation="-90 0 0"></a-video>
+  </a-marker>
+
+  <!-- Project Virtual Tour -->
+  <a-marker type="pattern" url="pattern-marker/virtual-tour/pattern-icon-04.patt">     
+    <a-video src="#video2" position="0 0 0" width="2" height="1.5" rotation="-90 0 0"></a-video>
+  </a-marker>
+
+  <!-- Project Virtual Shooting Game -->
+  <a-marker type="pattern" url="pattern-marker/shooting-game/pattern-icon-06.patt">     
+    <a-video src="#video3" position="0 0 0" width="2" height="1.5" rotation="-90 0 0"></a-video>
+  </a-marker>
+
+  <!-- Project AR Navigation -->
+  <a-marker type="pattern" url="pattern-marker/ar-navigation/pattern-icon-03.patt">     
+    <a-video src="#video4" position="0 0 0" width="2" height="1.5" rotation="-90 0 0"></a-video>
+  </a-marker>
+
+  <!-- Project AR Menu Card -->
+  <a-marker type="pattern" url="pattern-marker/ar-menu-card/pattern-icon-02.patt">
+    <a-video src="#video5" position="0 0 0" width="2" height="1.5" rotation="-90 0 0"></a-video>
+  </a-marker>
+
+</a-scene>
+
+  <script>
+    // Add event listeners to each marker
+    document.querySelectorAll('a-marker').forEach(function(marker) {
+      marker.addEventListener('markerFound', function() {
+        pauseAllVideos();
+        var video = this.querySelector('video');
+        if (video) {
+          video.play();
+        }
+      });
+      marker.addEventListener('markerLost', function() {
+        var video = this.querySelector('video');
+        if (video) {
+          video.pause();
+        }
+      });
+    });
+
+    // Function to pause all videos
+    function pauseAllVideos() {
+      document.querySelectorAll('video').forEach(function(video) {
+        video.pause();
+      });
+    }
+
+    // Unmute button functionality
+    document.getElementById('unmute-button').addEventListener('click', function () {
+      document.querySelectorAll('video').forEach(function(video) {
+        video.muted = false;
+      });
+    });
+  </script>
+</body>
+</html>
